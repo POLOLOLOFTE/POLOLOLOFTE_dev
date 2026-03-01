@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>POLOLOLOFTE_dev</title>
+  <title>POLOLOLOFTE_dev - Main</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Font Awesome per le icone social -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -17,11 +16,7 @@
       padding: 50px 20px;
     }
 
-    h1 {
-      font-size: 60px;
-      margin-bottom: 20px;
-    }
-
+    h1 { font-size: 60px; }
     p {
       font-size: 20px;
       max-width: 600px;
@@ -29,14 +24,56 @@
       line-height: 1.6;
     }
 
-    /* ===== BOTTONI ===== */
-    .btn, .btn1 {
+    /* ===== MENU LATERALE ===== */
+    .menu-trigger {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 100%;
+      z-index: 1001;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -220px;
+      width: 220px;
+      height: 100%;
+      background: linear-gradient(180deg, #000000, #333333);
+      padding-top: 100px;
+      transition: 0.4s ease;
+      box-shadow: 5px 0 20px rgba(0,0,0,0.3);
+    }
+
+    .side-menu a {
+      display: block;
+      padding: 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .side-menu a:hover {
+      background: #474747;
+      padding-left: 25px;
+    }
+
+    .menu-trigger:hover + .side-menu,
+    .side-menu:hover {
+      left: 0;
+    }
+
+    /* ===== BOTTONE ===== */
+    .btn {
       display: inline-block;
       padding: 16px 40px;
       font-size: 18px;
       font-weight: bold;
       text-decoration: none;
       color: white;
+      background: linear-gradient(45deg, #000000, #474747);
       border-radius: 50px;
       transition: all 0.3s ease;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -45,61 +82,9 @@
       margin: 15px;
     }
 
-    .btn {
-      background: linear-gradient(45deg, #000000, #474747);
-    }
-
-    .btn1 {
-      background: linear-gradient(45deg, #222222, #BCBCBC);
-    }
-
-    .btn:hover, .btn1:hover {
+    .btn:hover {
       transform: translateY(-5px) scale(1.05);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    }
-
-    .btn:active, .btn1:active {
-      transform: scale(0.95);
-    }
-
-    .btn::before, .btn1::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.4),
-        transparent
-      );
-      transition: 0.6s;
-    }
-
-    .btn:hover::before, .btn1:hover::before {
-      left: 100%;
-    }
-
-    /* ===== BARRA SOCIAL ===== */
-    .social-bar {
-      margin-top: 80px;
-      padding: 30px 0;
-      border-top: 1px solid rgba(0,0,0,0.1);
-    }
-
-    .social-bar a {
-      margin: 0 20px;
-      font-size: 28px;
-      color: #333;
-      transition: 0.3s ease;
-      text-decoration: none;
-    }
-
-    .social-bar a:hover {
-      color: black;
-      transform: translateY(-6px) scale(1.2);
     }
 
   </style>
@@ -107,61 +92,25 @@
 
 <body>
 
-  <div class="content">
-    <h1>POLOLOLOFTE_dev</h1>
-    <p>
-      I'm an indie developer who really cares about device compatibility
-      to make games accessible to everyone.
-      You don't need a huge GPU.
-      You don't need a lot of RAM.
-      YOU NEED POLOLOLOFTE_dev.
-    </p>
-
-    <a href="https://polololofte-dev.itch.io" target="_blank" class="btn">
-      Download My Games
-    </a>
-
-    <h1>Story</h1>
-    <p>
-      It started as a hobby with an old laptop and now I'm a worldwide developer.
-      I'm not that popular yet, but I would love if you download some of my games.
-    </p>
+  <!-- MENU -->
+  <div class="menu-trigger"></div>
+  <div class="side-menu">
+    <a href="main.html">Main</a>
+    <a href="download.html">Download</a>
+    <a href="support.html">Support</a>
   </div>
 
-  <div class="content">
-    <h1>Feedback</h1>
+  <h1>POLOLOLOFTE_dev</h1>
 
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd6lXJNc8g_BeYsAhNnm_pq7fMqLgxHAL9vE3KmnNye8QqylQ/viewform?usp=publish-editor" 
-       target="_blank" 
-       class="btn1">
-      Wanna give a Feedback?
-    </a>
-  </div>
+  <p>
+    Indie developer focused on accessibility and performance.
+    You don't need a huge GPU.
+    You need POLOLOLOFTE_dev.
+  </p>
 
-  <!-- ===== SOCIAL LINKS ===== -->
-  <div class="social-bar">
-
-    <a href="https://www.youtube.com/channel/UCUIVoxcgTZxAJKwI6Pf8d7A" target="_blank">
-      <i class="fab fa-youtube"></i>
-    </a>
-
-    <a href="https://www.instagram.com/polololofte_dev/" target="_blank">
-      <i class="fab fa-instagram"></i>
-    </a>
-
-    <a href="https://polololofte-dev.itch.io" target="_blank">
-      <i class="fab fa-itch-io"></i>
-    </a>
-
-    <a href="https://discord.gg/PNQwa4Fc" target="_blank">
-      <i class="fab fa-discord"></i>
-    </a>
-
-    <a href="https://www.reddit.com/user/Strange-Ear1222/" target="_blank">
-      <i class="fab fa-reddit"></i>
-    </a>
-
-  </div>
+  <a href="download.html" class="btn">
+    Go to Downloads
+  </a>
 
 </body>
 </html>
