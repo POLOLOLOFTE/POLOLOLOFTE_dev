@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>POLOLOLOFTE_dev - Gioca Online</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Stile semplice per il gioco */
+    #game-container {
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    #click-btn {
+      padding: 20px 40px;
+      font-size: 24px;
+      font-weight: bold;
+      background: linear-gradient(45deg, #000, #474747);
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #click-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    #score {
+      font-size: 28px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="main.html">Main</a>
+    <a href="download.html">Download</a>
+    <a href="support.html">Support</a>
+  </div>
+
+  <div class="content">
+    <h1>Mini Gioco: Clicca il pulsante!</h1>
+    <p>Clicca il pulsante il più velocemente possibile in 10 secondi!</p>
+
+    <div id="game-container">
+      <button id="click-btn">Cliccami!</button>
+      <div id="score">Punteggio: 0</div>
+      <p id="timer">Tempo rimasto: 10s</p>
+    </div>
+
+    <a href="download.html" class="btn">Torna al Download</a>
+  </div>
+
+  <div class="footer">
+    <p>Seguimi su:</p>
+    <a href="https://www.instagram.com/polololofte_dev" target="_blank">Instagram</a> |
+    <a href="https://www.youtube.com/@polololofte_dev" target="_blank">YouTube</a> |
+    <a href="https://www.reddit.com/user/polololofte_dev" target="_blank">Reddit</a> |
+    <a href="https://discord.gg/Jd7DPgqshN" target="_blank">Discord</a>
+  </div>
+
+  <script>
+    let score = 0;
+    let time = 10;
+    const btn = document.getElementById('click-btn');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+
+    btn.addEventListener('click', () => {
+      score++;
+      scoreDisplay.textContent = "Punteggio: " + score;
+    });
+
+    const countdown = setInterval(() => {
+      time--;
+      timerDisplay.textContent = "Tempo rimasto: " + time + "s";
+      if(time <= 0){
+        clearInterval(countdown);
+        btn.disabled = true;
+        btn.textContent = "Tempo Scaduto!";
+        timerDisplay.textContent = "Il gioco è finito!";
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
