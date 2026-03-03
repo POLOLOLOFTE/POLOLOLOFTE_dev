@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Button!</title>
+  <title>Button Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
   <style>
-    /* Stile semplice per il gioco */
     #game-container {
       margin: 20px auto;
       max-width: 600px;
@@ -32,59 +30,82 @@
       font-size: 28px;
       margin: 20px 0;
     }
+
+    #restart-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      display: none;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="navbar">
-    <a href="main.html">Main</a>
-    <a href="download.html">Download</a>
-    <a href="support.html">Support</a>
-  </div>
-
-  <div class="content">
+  <div id="game-container">
     <h1>Click The Button!</h1>
-    <p>Under 10 seconds!</p>
+    <p>You have 10 seconds!</p>
 
-    <div id="game-container">
-      <button id="click-btn">Click!</button>
-      <div id="score">Score: 0</div>
-      <p id="timer">Time: 10s</p>
-    </div>
-
-    <a href="download.html" class="btn">Return to Download</a>
-  </div>
-
-  <div class="footer">
-    <p>Follow POLOLOLOFTE_dev on:</p>
-    <a href="https://www.instagram.com/polololofte_dev" target="_blank">Instagram</a> |
-    <a href="https://www.youtube.com/@polololofte_dev" target="_blank">YouTube</a> |
-    <a href="https://www.reddit.com/user/polololofte_dev" target="_blank">Reddit</a> |
-    <a href="https://discord.gg/Jd7DPgqshN" target="_blank">Discord</a>
+    <button id="click-btn">Click to Start!</button>
+    <div id="score">Score: 0</div>
+    <p id="timer">Time: 10s</p>
+    <button id="restart-btn">Restart</button>
   </div>
 
   <script>
     let score = 0;
     let time = 10;
+    let countdown = null;
+    let gameStarted = false;
+
     const btn = document.getElementById('click-btn');
     const scoreDisplay = document.getElementById('score');
     const timerDisplay = document.getElementById('timer');
+    const restartBtn = document.getElementById('restart-btn');
+
+    function startGame() {
+      countdown = setInterval(() => {
+        time--;
+        timerDisplay.textContent = "Time: " + time + "s";
+
+        if (time <= 0) {
+          clearInterval(countdown);
+          btn.disabled = true;
+          btn.textContent = "Time's Up!";
+          timerDisplay.textContent = "Game Over!";
+          restartBtn.style.display = "inline-block";
+        }
+      }, 1000);
+    }
 
     btn.addEventListener('click', () => {
-      score++;
-      scoreDisplay.textContent = "Punteggio: " + score;
+      if (!gameStarted) {
+        gameStarted = true;
+        btn.textContent = "Click!";
+        startGame();
+      }
+
+      if (time > 0) {
+        score++;
+        scoreDisplay.textContent = "Score: " + score;
+      }
     });
 
-    const countdown = setInterval(() => {
-      time--;
-      timerDisplay.textContent = "Tempo rimasto: " + time + "s";
-      if(time <= 0){
-        clearInterval(countdown);
-        btn.disabled = true;
-        btn.textContent = "Tempo Scaduto!";
-        timerDisplay.textContent = "Il gioco è finito!";
-      }
-    }, 1000);
+    restartBtn.addEventListener('click', () => {
+      // Reset variables
+      score = 0;
+      time = 10;
+      gameStarted = false;
+
+      // Reset UI
+      scoreDisplay.textContent = "Score: 0";
+      timerDisplay.textContent = "Time: 10s";
+      btn.disabled = false;
+      btn.textContent = "Click to Start!";
+      restartBtn.style.display = "none";
+    });
+
   </script>
 
 </body>
