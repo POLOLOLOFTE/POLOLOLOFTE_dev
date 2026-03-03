@@ -4,10 +4,22 @@
   <title>Button Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 40px;
+    }
+
     #game-container {
-      margin: 20px auto;
-      max-width: 600px;
       text-align: center;
+    }
+
+    #leaderboard {
+      border-left: 2px solid #ccc;
+      padding-left: 30px;
+      min-width: 200px;
     }
 
     #click-btn {
@@ -23,90 +35,133 @@
 
     #click-btn:hover {
       transform: scale(1.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    #score {
-      font-size: 28px;
-      margin: 20px 0;
     }
 
     #restart-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 18px;
+      margin-top: 15px;
+      padding: 8px 15px;
       display: none;
       cursor: pointer;
+    }
+
+    input {
+      margin-top: 10px;
+      padding: 5px;
+    }
+
+    ol {
+      padding-left: 20px;
     }
   </style>
 </head>
 
 <body>
 
-  <div id="game-container">
-    <h1>Click The Button!</h1>
-    <p>You have 10 seconds!</p>
+<div id="game-container">
+  <h1>Click The Button!</h1>
+  <p>You have 10 seconds!</p>
 
-    <button id="click-btn">Click to Start!</button>
-    <div id="score">Score: 0</div>
-    <p id="timer">Time: 10s</p>
-    <button id="restart-btn">Restart</button>
+  <button id="click-btn">Click to Start!</button>
+  <p id="score">Score: 0</p>
+  <p id="timer">Time: 10s</p>
+
+  <div id="nickname-section" style="display:none;">
+    <p>New High Score! Enter your nickname:</p>
+    <input type="text" id="nickname" placeholder="Your name">
+    <button id="save-score">Save</button>
   </div>
 
-  <script>
-    let score = 0;
-    let time = 10;
-    let countdown = null;
-    let gameStarted = false;
+  <button id="restart-btn">Restart</button>
+</div>
 
-    const btn = document.getElementById('click-btn');
-    const scoreDisplay = document.getElementById('score');
-    const timerDisplay = document.getElementById('timer');
-    const restartBtn = document.getElementById('restart-btn');
+<div id="leaderboard">
+  <h2>Leaderboard (Session)</h2>
+  <ol id="score-list"></ol>
+</div>
 
-    function startGame() {
-      countdown = setInterval(() => {
-        time--;
-        timerDisplay.textContent = "Time: " + time + "s";
+<script>
+  let score = 0;
+  let time = 10;
+  let countdown = null;
+  let gameStarted = false;
 
-        if (time <= 0) {
-          clearInterval(countdown);
-          btn.disabled = true;
-          btn.textContent = "Time's Up!";
-          timerDisplay.textContent = "Game Over!";
-          restartBtn.style.display = "inline-block";
-        }
-      }, 1000);
+  const btn = document.getElementById('click-btn');
+  const scoreDisplay = document.getElementById('score');
+  const timerDisplay = document.getElementById('timer');
+  const restartBtn = document.getElementById('restart-btn');
+  const nicknameSection = document.getElementById('nickname-section');
+  const nicknameInput = document.getElementById('nickname');
+  const saveScoreBtn = document.getElementById('save-score');
+  const scoreList = document.getElementById('score-list');
+
+  let leaderboard = JSON.parse(sessionStorage.getItem("leaderboard")) || [];
+
+  function updateLeaderboard() {
+    scoreList.innerHTML = "";
+    leaderboard.sort((a, b) => b.score - a.score);
+    leaderboard.forEach(entry => {
+      const li = document.createElement("li");
+      li.textContent = entry.name + " - " + entry.score;
+      scoreList.appendChild(li);
+    });
+    sessionStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+  }
+
+  updateLeaderboard();
+
+  function startGame() {
+    countdown = setInterval(() => {
+      time--;
+      timerDisplay.textContent = "Time: " + time + "s";
+
+      if (time <= 0) {
+        clearInterval(countdown);
+        btn.disabled = true;
+        btn.textContent = "Time's Up!";
+        timerDisplay.textContent = "Game Over!";
+        restartBtn.style.display = "inline-block";
+
+        nicknameSection.style.display = "block";
+      }
+    }, 1000);
+  }
+
+  btn.addEventListener('click', () => {
+    if (!gameStarted) {
+      gameStarted = true;
+      btn.textContent = "Click!";
+      startGame();
     }
 
-    btn.addEventListener('click', () => {
-      if (!gameStarted) {
-        gameStarted = true;
-        btn.textContent = "Click!";
-        startGame();
-      }
+    if (time > 0) {
+      score++;
+      scoreDisplay.textContent = "Score: " + score;
+    }
+  });
 
-      if (time > 0) {
-        score++;
-        scoreDisplay.textContent = "Score: " + score;
-      }
-    });
+  saveScoreBtn.addEventListener('click', () => {
+    const name = nicknameInput.value.trim();
+    if (name !== "") {
+      leaderboard.push({ name: name, score: score });
+      updateLeaderboard();
+      nicknameInput.value = "";
+      nicknameSection.style.display = "none";
+    }
+  });
 
-    restartBtn.addEventListener('click', () => {
-      // Reset variables
-      score = 0;
-      time = 10;
-      gameStarted = false;
+  restartBtn.addEventListener('click', () => {
+    score = 0;
+    time = 10;
+    gameStarted = false;
 
-      // Reset UI
-      scoreDisplay.textContent = "Score: 0";
-      timerDisplay.textContent = "Time: 10s";
-      btn.disabled = false;
-      btn.textContent = "Click to Start!";
-      restartBtn.style.display = "none";
-    });
-
-  </script>
+    scoreDisplay.textContent = "Score: 0";
+    timerDisplay.textContent = "Time: 10s";
+    btn.disabled = false;
+    btn.textContent = "Click to Start!";
+    restartBtn.style.display = "none";
+    nicknameSection.style.display = "none";
+  });
+</script>
 
 </body>
 </html>
