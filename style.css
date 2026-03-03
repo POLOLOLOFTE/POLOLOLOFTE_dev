@@ -22,9 +22,10 @@ body {
   text-decoration: none;
   margin: 0 25px;
   font-weight: bold;
-  font-size: 18px;
+  font-size: clamp(16px, 2vw, 18px);
   transition: 0.3s;
   position: relative;
+  display: inline-block;
 }
 
 .navbar a::after {
@@ -50,23 +51,26 @@ body {
 .content {
   padding-top: 120px;
   animation: fadeIn 0.8s ease;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 h1 {
-  font-size: 60px;
+  font-size: clamp(32px, 6vw, 60px);
 }
 
 p {
-  font-size: 20px;
+  font-size: clamp(16px, 2.5vw, 20px);
   max-width: 600px;
   margin: 20px auto;
   line-height: 1.6;
 }
 
+/* ===== BOTTONI ===== */
 .btn {
   display: inline-block;
   padding: 16px 40px;
-  font-size: 18px;
+  font-size: clamp(14px, 2vw, 18px);
   font-weight: bold;
   text-decoration: none;
   color: white;
@@ -93,40 +97,13 @@ p {
   }
 }
 
-/* ===== VERSIONE MOBILE ===== */
-@media (max-width: 768px) {
-
-  .navbar {
-    padding: 10px 0;
-  }
-
-  .navbar a {
-    display: block;
-    margin: 10px 0;
-    font-size: 16px;
-  }
-
-  h1 {
-    font-size: 35px;
-  }
-
-  p {
-    font-size: 16px;
-    padding: 0 15px;
-  }
-
-  .btn {
-    padding: 14px 30px;
-    font-size: 16px;
-  }
-
-}
+/* ===== FOOTER ===== */
 .footer {
   background: #222;
   color: #fff;
   padding: 20px 0;
   text-align: center;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px);
   margin-top: 50px;
 }
 
@@ -138,18 +115,41 @@ p {
 }
 
 .footer a:hover {
-  color: #1DA1F2; /* effetto hover blu */
+  color: #1DA1F2;
   transform: scale(1.1);
 }
 
+/* ===== MOBILE VERSION ===== */
 @media (max-width: 768px) {
-  .footer {
-    font-size: 14px;
-    padding: 15px 0;
+
+  .navbar {
+    padding: 10px 0;
+  }
+
+  .navbar a {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .content {
+    padding-top: 100px;
+  }
+
+  .btn {
+    padding: 14px 30px;
   }
 
   .footer a {
     display: block;
     margin: 8px 0;
+  }
+
+}
+
+/* ===== LARGE SCREENS ===== */
+@media (min-width: 1400px) {
+  .content {
+    max-width: 1200px;
+    margin: auto;
   }
 }
