@@ -3,13 +3,16 @@
 <head>
   <title>Button Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
-      gap: 50px;
+      gap: 60px;
       margin-top: 40px;
+      background: #111;
+      color: white;
     }
 
     #game-container {
@@ -17,41 +20,92 @@
     }
 
     #leaderboard {
-      border-left: 2px solid #ccc;
+      border-left: 2px solid #444;
       padding-left: 30px;
-      min-width: 200px;
+      min-width: 220px;
+      animation: fadeIn 0.8s ease-in-out;
     }
 
-    #click-btn {
-      padding: 20px 40px;
-      font-size: 24px;
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    /* ===== YOUR BUTTON STYLE (applied to all buttons) ===== */
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
       font-weight: bold;
       background: linear-gradient(45deg, #000, #474747);
       color: white;
       border-radius: 50px;
+      border: none;
       cursor: pointer;
       transition: 0.3s;
+      margin-top: 10px;
     }
 
-    #click-btn:hover {
+    button:hover {
       transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    #restart-btn {
-      margin-top: 15px;
-      padding: 8px 15px;
-      display: none;
-      cursor: pointer;
+    button:active {
+      transform: scale(0.95);
+    }
+
+    #click-btn {
+      font-size: 24px;
+      padding: 20px 40px;
+    }
+
+    #score {
+      font-size: 28px;
+      margin: 20px 0;
+      transition: 0.2s;
+    }
+
+    .score-pop {
+      transform: scale(1.2);
+      color: #00ffcc;
     }
 
     input {
       margin-top: 10px;
-      padding: 5px;
+      padding: 8px;
+      border-radius: 20px;
+      border: none;
+      text-align: center;
     }
 
     ol {
       padding-left: 20px;
     }
+
+    li {
+      margin-bottom: 5px;
+      animation: slideIn 0.4s ease;
+    }
+
+    .game-over {
+      animation: glow 1s infinite alternate;
+      color: red;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateX(20px);}
+      to {opacity: 1; transform: translateX(0);}
+    }
+
+    @keyframes slideIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes glow {
+      from {text-shadow: 0 0 5px red;}
+      to {text-shadow: 0 0 20px red;}
+    }
+
   </style>
 </head>
 
@@ -66,12 +120,13 @@
   <p id="timer">Time: 10s</p>
 
   <div id="nickname-section" style="display:none;">
-    <p>New High Score! Enter your nickname:</p>
+    <p>Enter your nickname:</p>
     <input type="text" id="nickname" placeholder="Your name">
-    <button id="save-score">Save</button>
+    <br>
+    <button id="save-score">Save Score</button>
   </div>
 
-  <button id="restart-btn">Restart</button>
+  <button id="restart-btn" style="display:none;">Restart</button>
 </div>
 
 <div id="leaderboard">
@@ -94,16 +149,18 @@
   const saveScoreBtn = document.getElementById('save-score');
   const scoreList = document.getElementById('score-list');
 
-  let leaderboard = JSON.parse(sessionStorage.getItem("leaderboard")) || [];
+  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
 
   function updateLeaderboard() {
     scoreList.innerHTML = "";
     leaderboard.sort((a, b) => b.score - a.score);
-    leaderboard.forEach(entry => {
+
+    leaderboard.slice(0, 10).forEach(entry => {
       const li = document.createElement("li");
       li.textContent = entry.name + " - " + entry.score;
       scoreList.appendChild(li);
     });
+
     localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
   }
 
@@ -118,9 +175,8 @@
         clearInterval(countdown);
         btn.disabled = true;
         btn.textContent = "Time's Up!";
-        timerDisplay.textContent = "Game Over!";
+        timerDisplay.classList.add("game-over");
         restartBtn.style.display = "inline-block";
-
         nicknameSection.style.display = "block";
       }
     }, 1000);
@@ -136,6 +192,9 @@
     if (time > 0) {
       score++;
       scoreDisplay.textContent = "Score: " + score;
+
+      scoreDisplay.classList.add("score-pop");
+      setTimeout(() => scoreDisplay.classList.remove("score-pop"), 150);
     }
   });
 
@@ -156,11 +215,15 @@
 
     scoreDisplay.textContent = "Score: 0";
     timerDisplay.textContent = "Time: 10s";
+    timerDisplay.classList.remove("game-over");
+
     btn.disabled = false;
     btn.textContent = "Click to Start!";
+
     restartBtn.style.display = "none";
     nicknameSection.style.display = "none";
   });
+
 </script>
 
 </body>
